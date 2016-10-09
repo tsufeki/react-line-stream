@@ -1,0 +1,20 @@
+{
+    "name": "tsufeki/react-line-stream",
+    "description": "Line-by-line stream reading for React PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tsufeki",
+            "email": "tsufeki@ymail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ReactLineStream\\": "src/ReactLineStream/"
+        }
+    },
+    "require": {
+        "evenement/evenement": "^2.0",
+        "react/stream": "^0.4.4"
+    }
+}
