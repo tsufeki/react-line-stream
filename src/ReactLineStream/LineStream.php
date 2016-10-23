@@ -51,8 +51,9 @@ class LineStream extends EventEmitter implements ReadableStreamInterface
      */
     public function handleData($data)
     {
-        $this->buffer .= $data;
+        $this->emit('data', array($data));
 
+        $this->buffer .= $data;
         $lines = explode($this->eol, $this->buffer);
         for ($i = 0; $i < count($lines) - 1; $i++) {
             $this->emit('line', array($lines[$i] . $this->eol, $this));
@@ -101,6 +102,7 @@ class LineStream extends EventEmitter implements ReadableStreamInterface
     public function close()
     {
         $this->closed = true;
+        $this->emit('close');
         return $this->stream->close();
     }
 }
