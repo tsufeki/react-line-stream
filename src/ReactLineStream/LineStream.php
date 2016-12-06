@@ -41,9 +41,8 @@ class LineStream extends EventEmitter implements ReadableStreamInterface
         $this->stream = $stream;
         $this->stream->on('data', array($this, 'handleData'));
         $this->stream->on('end',  array($this, 'handleEnd'));
-        Util::forwardEvents($this->stream, $this, [
-            'error',
-        ]);
+        $this->stream->on('error',  array($this, 'handleError'));
+        $this->stream->on('close',  array($this, 'close'));
     }
 
     /**
@@ -51,6 +50,9 @@ class LineStream extends EventEmitter implements ReadableStreamInterface
      */
     public function handleData($data)
     {
+        if ($this->closed) {
+            return;
+        }
         $this->emit('data', array($data));
 
         $this->buffer .= $data;
@@ -78,6 +80,12 @@ class LineStream extends EventEmitter implements ReadableStreamInterface
         $this->close();
     }
 
+    public function handleError()
+    {
+        $this->emit('error', func_get_args());
+        $this->close();
+    }
+
     public function pause()
     {
         $this->stream->pause();
@@ -101,8 +109,11 @@ class LineStream extends EventEmitter implements ReadableStreamInterface
 
     public function close()
     {
+        if ($this->closed) {
+            return;
+        }
         $this->closed = true;
+        $this->stream->close();
         $this->emit('close');
-        return $this->stream->close();
     }
 }
