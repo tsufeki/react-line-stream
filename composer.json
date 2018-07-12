@@ -15,6 +15,6 @@
     },
     "require": {
         "evenement/evenement": "^3.0 || ^2.0",
-        "react/stream": "^0.7"
+        "react/stream": "^1.0"
     }
 }
